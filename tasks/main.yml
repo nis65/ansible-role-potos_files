@@ -9,7 +9,7 @@
 
 - name: copy files
   ansible.builtin.template:
-    src: "{{ potos_files.src }}"
+    src: "potos_files/{{ potos_files.src }}"
     dest: "{{ potos_files.dest }}"
     owner: "{{ potos_files.owner }}"
     group: "{{ potos_files.group }}"
