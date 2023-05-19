@@ -7,9 +7,13 @@
 #    group: root
 #    mode: '0755'
 
-- name: ensure dir exists
-  ansible.builtin.debug:
-    msg: "{{ potos_files.dest | dirname }}"
+- name: ensure base dir exists
+  ansible.builtin.file:
+    path: "{{ potos_files.dest | dirname }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
 
 - name: copy files
   ansible.builtin.template:
