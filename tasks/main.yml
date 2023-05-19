@@ -15,5 +15,5 @@
     dest: "{{ item.dest }}"
     owner: "{{ item.owner | default(potos_files_default_owner) }}"
     group: "{{ item.group | default(potos_files_default_group) }}"
-    mode: "{{ item.mode | default(pototos_files_default_file_mode) }}"
+    mode: "{{ item.mode | default(potos_files_default_file_mode) }}"
   loop: "{{ potos_files }}"
