@@ -1,6 +1,5 @@
 ---
 
-#- name: Example task to deploy a template
 #  ansible.builtin.template:
 #    src: 'potos.example.j2'
 #    dest: '/potos.example'
@@ -8,6 +7,11 @@
 #    group: root
 #    mode: '0755'
 
-- name: copy param file
-  ansible.builtin.copy:
-    src: {{ ...
+- name: copy files
+  ansible.builtin.template:
+    src: "{{ potos_files.src }}"
+    dest: "{{ potos_files.dest }}"
+    owner: "{{ potos_files.owner }}"
+    group: "{{ potos_files.group }}"
+    mode: "{{ potos_files.mode }}"
+
