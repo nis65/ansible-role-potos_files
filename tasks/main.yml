@@ -13,7 +13,7 @@
   ansible.builtin.template:
     src: "potos_files/{{ item.src }}"
     dest: "{{ item.dest }}"
-    owner: "{{ item.owner }}"
-    group: "{{ item.group }}"
-    mode: "{{ item.mode }}"
+    owner: "{{ item.owner | default(potos_files_default_owner) }}"
+    group: "{{ item.group | default(potos_files_default_group) }}"
+    mode: "{{ item.mode | default(pototos_files_default_file_mode) }}"
   loop: "potos_files"
