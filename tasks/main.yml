@@ -7,7 +7,7 @@
     owner: "{{ potos_files_default_owner }}"
     group: "{{ potos_files_default_group }}"
     mode: "{{ potos_files_default_dir_mode }}"
-  loop: "potos_files"
+  loop: "{{ potos_files }}"
 
 - name: copy files
   ansible.builtin.template:
@@ -16,4 +16,4 @@
     owner: "{{ item.owner | default(potos_files_default_owner) }}"
     group: "{{ item.group | default(potos_files_default_group) }}"
     mode: "{{ item.mode | default(pototos_files_default_file_mode) }}"
-  loop: "potos_files"
+  loop: "{{ potos_files }}"
