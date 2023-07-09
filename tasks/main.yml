@@ -1,9 +1,19 @@
 ---
 
-- name: Example task to deploy a template
+- name: ensure base dirs exists
+  ansible.builtin.file:
+    path: "{{ item.dest | dirname }}"
+    state: directory
+    owner: "{{ potos_files_default_owner }}"
+    group: "{{ potos_files_default_group }}"
+    mode: "{{ potos_files_default_dir_mode }}"
+  loop: "{{ potos_files }}"
+
+- name: copy files
   ansible.builtin.template:
-    src: 'potos.example.j2'
-    dest: '/potos.example'
-    owner: root
-    group: root
-    mode: '0755'
+    src: "potos_files/{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: "{{ item.owner | default(potos_files_default_owner) }}"
+    group: "{{ item.group | default(potos_files_default_group) }}"
+    mode: "{{ item.mode | default(potos_files_default_file_mode) }}"
+  loop: "{{ potos_files }}"
