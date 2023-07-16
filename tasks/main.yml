@@ -17,3 +17,27 @@
     group: "{{ item.group | default(potos_files_default_group) }}"
     mode: "{{ item.mode | default(potos_files_default_file_mode) }}"
   loop: "{{ potos_files }}"
+
+- name: divert files
+  community.general.dpkg_divert:
+    path: "{{ item.path }}"
+    divert: "{{ item.path }}.diverted-{{ item.holder }}"
+    holder: "{{ item.holder }}"
+    rename: true
+  loop: "{{ potos_files_diverts }}"
+
+- name: copy diverted files back locally if not there yet
+  ansible.builtin.copy:
+    src: "{{ item.path }}.diverted-{{ item.holder }}"
+    dest: "{{ item.path }}"
+    force: false
+    remote_src: true
+  loop: "{{ potos_files_diverts }}"
+
+- name: add line to copied files
+  ansible.builtin.lineinfile:
+    path: "{{ item.path }}"
+    insertafter: "EOF"
+    line: "{{ item.linecontent }}"
+    search_string: "{{ item.linematch }}"
+  loop: "{{ potos_files_diverts }}"

@@ -69,6 +69,34 @@ potos_files_default_file_mode: "0644"
 potos_files_default_dir_mode: "0755"
 ```
 
+An experimental feature allows to edit a single line in a file that
+is delivered by a debian package:
+
+```yaml
+potos_files_diverts:
+  - path: "/usr/share/themes/Yaru/gtk-3.0/gtk.css"
+    holder: "mlc"
+    linematch: "/etc/mlc/yaru_override.css"
+    linecontent: '@import "/etc/mlc/yaru_override.css";'
+```
+
+From the Debian Manual: *It is possible to have `dpkg` not overwrite a file 
+when it reinstalls the package it belongs to, and to have it put the file 
+from the package somewhere else instead.* 
+
+So what the above setting currently does: 
+
+* it *diverts* the `gtk.css` file to `gtk.css.diverted-mlc` in the same directory.
+  Next time the package delivering that file is upgraded or reinstalled, `dpkg`
+  will not touch `gtk.css` any more, but overwrite `gtk.css.diverted-mlc` with
+  its newest version (`community.general.dpkg_divert`).
+* the diverted file is copied to the original filename `gtk.css` if it does
+  not exist yet (`ansible.builtin.copy`). This prevents unneeded ansible "changes" 
+  but may miss a fresh version after an update of the underlying package. To be improved.
+* `gtk.css` is searched for the last occurrence of the `linematch` and replaces that
+  line with the `linecontent`. If no match is found, `linecontent` is appended at
+  the end of the file as new last line (`ansible.builtin.lineinfile`).
+
 Another option is to use `ansible-doc` to read the argument specification:
 
 ```sh
