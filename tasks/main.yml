@@ -18,6 +18,14 @@
     mode: "{{ item.mode | default(potos_files_default_file_mode) }}"
   loop: "{{ potos_files }}"
 
+- name: edit or add line to file
+  ansible.builtin.lineinfile:
+    path: "{{ item.path }}"
+    insertbefore: "{{ item.insertbefore}}"
+    regexp: "{{ item.lineregexp }}"
+    line: "{{ item.linecontent }}"
+  loop: "{{ potos_files_edits }}"
+
 - name: divert files
   community.general.dpkg_divert:
     path: "{{ item.path }}"
